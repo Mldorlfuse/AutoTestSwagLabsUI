@@ -1,5 +1,5 @@
 class CorrectLoginData:
-    username ='standard_user'
+    username = 'standard_user'
     password = 'secret_sauce'
 
 class LockedLoginData:

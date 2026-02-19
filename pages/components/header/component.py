@@ -16,12 +16,18 @@ class HeaderComponent():
         with allure.step('Нажать кнопку logout'):
             self.page.locator(HeaderLocators.LOGOUT_BTN).click()
 
-    def check_url(self):
-        with allure.step('url страницы должен быть https://www.saucedemo.com/'):
-            expect(self.page).to_have_url('https://www.saucedemo.com/')
-
     def logout_full_path(self):
         with allure.step('Разлогиниться'):
             self.open_menu()
             self.logout_btn_click()
-            self.check_url()
+
+    def check_count(self, count):
+        with allure.step(f'Возле иконки корзины должно быть число {count}'):
+            if count == 0 :
+                expect(self.page.locator(HeaderLocators.SHOPPING_CART_COUNT)).not_to_be_attached()
+            else:
+                expect(self.page.locator(HeaderLocators.SHOPPING_CART_COUNT)).to_have_text(count)
+
+    def open_shopping_cart(self):
+        with allure.step('Открыть меню корзины'):
+            self.page.locator(HeaderLocators.OPEN_SHOPPING_CART_BTN).click()

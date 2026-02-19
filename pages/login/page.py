@@ -23,6 +23,10 @@ class LoginPage(BasePage):
         with allure.step('Нажать кнопку Login'):
             self.page.locator(LoginLocators.LOGIN_BUTTON).click()
 
+    def check_url(self):
+        with allure.step('url страницы должен быть https://www.saucedemo.com/'):
+            expect(self.page).to_have_url('https://www.saucedemo.com/')
+
     def login(self, user):
         with allure.step('Авторизация'):
             self.fill_username(user.username)
