@@ -1,3 +1,5 @@
+from logging.config import listen
+
 import allure
 from playwright.sync_api import expect
 
@@ -9,26 +11,33 @@ class InventoryPage(BasePage):
 
     def get_item_name(self, item):
         with allure.step('Получить название элемента с главного экрана'):
-            return item.locator(InventoryLocators.INVENTORY_ITEM_NAME)
+            return item.locator(InventoryLocators.INVENTORY_ITEM_NAME).text_content()
 
     def get_item_desc(self, item):
         with allure.step('Получить описание элемента с главного экрана'):
-            return item.locator(InventoryLocators.INVENTORY_ITEM_DESC)
+            return item.locator(InventoryLocators.INVENTORY_ITEM_DESC).text_content()
 
     def get_item_price(self, item):
         with allure.step('Получить цену элемента с главного экрана'):
-            return item.locator(InventoryLocators.INVENTORY_ITEM_PRICE)
+            return item.locator(InventoryLocators.INVENTORY_ITEM_PRICE).text_content()
 
-    def get_item_info(self):
+    def get_item_info(self, item):
         with allure.step('Получить данные элемента с главного экрана'):
             item_data = {
-                'item_name': self.get_item_name,
-                'item_desc': self.get_item_desc,
-                'item_price': self.get_item_price
+                'item_name': self.get_item_name(item),
+                'item_desc': self.get_item_desc(item),
+                'item_price': self.get_item_price(item)
 
             }
 
             return item_data
+
+    def create_list_items_info(self, random_count):
+        with allure.step('Добавить информацию об элементе в список'):
+            list_items = []
+            for number in random_count:
+                list_items.append(self.get_item_info(self.get_item(number)))
+            return list_items
 
     def add_to_cart_by_index(self, index):
         with allure.step('Добавить элемент в корзину'):

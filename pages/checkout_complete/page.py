@@ -5,7 +5,7 @@ from playwright.sync_api import expect
 from pages.base.page import BasePage
 from pages.checkout_complete.locators import CheckoutCompleteLocators
 
-class CheckoutComplete(BasePage):
+class CheckoutCompletePage(BasePage):
 
     def check_title(self):
         with allure.step('Текст заголовка должен быть равен "Thank you for your order!"'):

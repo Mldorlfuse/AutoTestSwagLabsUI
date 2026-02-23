@@ -5,7 +5,8 @@ from pages.inventory.page import InventoryPage
 from pages.cart.page import CartPage
 from pages.checkout_step_one.page import CheckoutStepOnePage
 from pages.checkout_step_two.page import CheckoutStepTwoPage
-from pages.checkout_complete.page import CheckoutComplete
+from pages.checkout_complete.page import CheckoutCompletePage
+from pages.inventory_item.page import InventoryItemPage
 
 
 class App:
@@ -17,4 +18,5 @@ class App:
         self.cart_page = CartPage(page)
         self.checkout_step_one = CheckoutStepOnePage(page)
         self.checkout_step_two = CheckoutStepTwoPage(page)
-        self.checkout_complete = CheckoutComplete(page)
+        self.checkout_complete = CheckoutCompletePage(page)
+        self.inventory_item_page = InventoryItemPage(page)

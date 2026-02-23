@@ -11,26 +11,35 @@ class CartPage(BasePage):
 
     def get_item_name(self, item):
         with allure.step('Получить название элемента со страницы корзины'):
-            return item.locator(CartLocators.INVENTORY_ITEM_NAME)
+            return item.locator(CartLocators.INVENTORY_ITEM_NAME).text_content()
 
     def get_item_desc(self, item):
         with allure.step('Получить описание элемента со страницы корзины'):
-            return item.locator(CartLocators.INVENTORY_ITEM_DESC)
+            return item.locator(CartLocators.INVENTORY_ITEM_DESC).text_content()
 
     def get_item_price(self, item):
         with allure.step('Получить цену элемента со страницы корзины'):
-            return item.locator(CartLocators.INVENTORY_ITEM_PRICE)
+            return item.locator(CartLocators.INVENTORY_ITEM_PRICE).text_content()
 
-    def get_item_info(self):
+    def get_item_info(self, item):
         with allure.step('Получить данные элемента со страницы корзины'):
-            item_data_from_cart = {
-                'item_name': self.get_item_name,
-                'item_desc': self.get_item_desc,
-                'item_price': self.get_item_price
+            item_data = {
+                'item_name': self.get_item_name(item),
+                'item_desc': self.get_item_desc(item),
+                'item_price': self.get_item_price(item)
 
             }
 
-            return item_data_from_cart
+            return item_data
+
+    def create_list_items_info(self):
+        with allure.step('Добавить информацию об элементе в список'):
+            list_items = []
+            i = int(self.get_count_items().count()) - 1
+            while i >= 0:
+                list_items.append(self.get_item_info(self.get_item(i)))
+                i -= 1
+            return list_items
 
     def get_count_items(self):
         with allure.step('Получить количество элементов на странице корзины'):
