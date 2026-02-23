@@ -1,5 +1,6 @@
 import allure
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
+
 
 class BasePage:
     base_url= 'https://www.saucedemo.com/'
@@ -10,3 +11,12 @@ class BasePage:
     def open_base_page(self):
         with allure.step(f'Открыть страницу с url{self.base_url}'):
             self.page.goto(self.base_url)
+
+    @staticmethod
+    def compare_count_in_cart_and_random(items, random_count):
+        with allure.step('сравнить количество элементов на странице корзины с количеством добавленных'):
+            expect(items).to_have_count(int(random_count))
+
+    def check_url(self, url):
+        with allure.step(f'Url страницы должен быть равен {url}'):
+            expect(self.page).to_have_url(url)

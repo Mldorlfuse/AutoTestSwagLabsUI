@@ -3,23 +3,21 @@ import allure
 from playwright.sync_api import expect
 
 from pages.base.page import BasePage
-from pages.cart.locators import CartLocators
+from pages.checkout_step_two.locators import CheckoutStepTwoLocators
 
-class CartPage(BasePage):
-
-    CartLocators = CartLocators()
+class CheckoutStepTwoPage(BasePage):
 
     def get_item_name(self, item):
         with allure.step('Получить название элемента со страницы корзины'):
-            return item.locator(CartLocators.INVENTORY_ITEM_NAME)
+            return item.locator(CheckoutStepTwoLocators.INVENTORY_ITEM_NAME)
 
     def get_item_desc(self, item):
         with allure.step('Получить описание элемента со страницы корзины'):
-            return item.locator(CartLocators.INVENTORY_ITEM_DESC)
+            return item.locator(CheckoutStepTwoLocators.INVENTORY_ITEM_DESC)
 
     def get_item_price(self, item):
         with allure.step('Получить цену элемента со страницы корзины'):
-            return item.locator(CartLocators.INVENTORY_ITEM_PRICE)
+            return item.locator(CheckoutStepTwoLocators.INVENTORY_ITEM_PRICE)
 
     def get_item_info(self):
         with allure.step('Получить данные элемента со страницы корзины'):
@@ -32,21 +30,24 @@ class CartPage(BasePage):
 
             return item_data_from_cart
 
+    def finish_btn_click(self):
+        with allure.step('Нажать кнпоку Finish'):
+            self.page.locator(CheckoutStepTwoLocators.FINISH_BTN).click()
+
     def get_count_items(self):
         with allure.step('Получить количество элементов на странице корзины'):
-            return self.page.locator(CartLocators.INVENTORY_ITEM)
+            return self.page.locator(CheckoutStepTwoLocators.INVENTORY_ITEM)
 
     def get_item(self, index):
         with allure.step(f'Получить элемент с индексом {index}'):
-            return self.page.locator(CartLocators.INVENTORY_ITEM).nth(index)
+            return self.page.locator(CheckoutStepTwoLocators.INVENTORY_ITEM).nth(index)
 
-    def delete_from_cart(self):
-        with allure.step('Удалить элементы на странице корзины'):
+    def check_total_price(self):
+        with (allure.step('Проверить соответствие отображаемой суммы всех товаров')):
             i = int(self.get_count_items().count()) - 1
+            total_price = 0
             while i >= 0:
-                self.get_item(i).locator(CartLocators.INVENTORY_ITEM_REMOVE_BTN).click()
+                total_price += float(self.get_item(i).locator(CheckoutStepTwoLocators.INVENTORY_ITEM_PRICE
+                                                        ).inner_text().replace('$', ''))
                 i -= 1
-
-    def checkout_btn_click(self):
-        with allure.step('Нажать кнопку Checkout'):
-            self.page.locator(CartLocators.CHECKOUT_BTN).click()
+            expect(CheckoutStepTwoLocators.SUBTOTAL_PRICE).to_have_text(f'Item total: {total_price}')

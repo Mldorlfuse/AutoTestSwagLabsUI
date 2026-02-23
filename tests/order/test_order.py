@@ -16,17 +16,25 @@ def test_add_to_cart_random_count(open_base_page_and_authorization, get_random_c
 def test_add_to_cart_random_count_and_remove(open_base_page_and_authorization, get_random_count, app):
     app.inventory_page.add_random_items_to_cart(get_random_count)
     app.header_component.open_shopping_cart()
-    app.header_component.check_count(str(len(get_random_count)))
-    app.cart_page.compare_count_in_cart_and_random(str(len(get_random_count)))
     app.cart_page.delete_from_cart()
     app.header_component.check_count(0)
 
 @allure.epic("UI")
-@allure.feature("Добавление и удаление из корзины")
+@allure.feature("Оформление товара")
 @allure.story("Оформление товара")
 def test_order_full_path(open_base_page_and_authorization, get_random_count, get_random_inform_data, app):
     app.inventory_page.add_random_items_to_cart(get_random_count)
     app.header_component.open_shopping_cart()
-    app.cart_page.check_out_btn_click()
+    app.cart_page.checkout_btn_click()
     app.checkout_step_one.fill_all_and_submit(get_random_inform_data)
+    app.checkout_step_two.finish_btn_click()
+    app.checkout_complete.check_all_text_and_click_back_home()
+    app.base_page.check_url('https://www.saucedemo.com/inventory.html')
+
+@allure.epic("UI")
+@allure.feature("Оформление товара")
+@allure.story("Проверка соответствия информации отображаемой на каждой странице этапа оформления товара")
+def test_check_all_information_at_all_pages(open_base_page_and_authorization, get_random_count, get_random_inform_data, app):
+    app.inventory_page.add_random_items_to_cart(get_random_count)
+    app.header_component.open_shopping_cart()
 

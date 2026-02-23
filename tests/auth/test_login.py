@@ -21,4 +21,4 @@ def test_login_with_incorrect_data(open_base_page, app, logins):
 @allure.story("Авторизация и выход из аккаунта")
 def test_login_and_logout(open_base_page_and_authorization, app):
     app.header_component.logout_full_path()
-    app.login_page.check_url()
+    app.base_page.check_url('https://www.saucedemo.com/')
