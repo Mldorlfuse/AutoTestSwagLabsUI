@@ -9,7 +9,6 @@ def page():
         browser = p.chromium.launch(headless=False)
         context = browser.new_context()
         page = context.new_page()
-        page.set_viewport_size({'width': 1080, 'height': 1920})
         yield page
         browser.close()
 

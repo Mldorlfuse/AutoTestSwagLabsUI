@@ -10,7 +10,7 @@ class BasePage:
         self.page = page
 
     def open_base_page(self):
-        with allure.step(f'Открыть страницу с url{self.base_url}'):
+        with allure.step(f'Открыть страницу с url {self.base_url}'):
             self.page.goto(self.base_url)
 
     @staticmethod
@@ -18,7 +18,6 @@ class BasePage:
         with allure.step('сравнить количество элементов на странице корзины с количеством добавленных'):
             expect(items).to_have_count(int(random_count))
 
-    @staticmethod
     def check_url(self, url):
         with allure.step(f'Url страницы должен быть равен {url}'):
             expect(self.page).to_have_url(url)

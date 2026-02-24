@@ -15,15 +15,14 @@ def authorization(app):
     app.login_page.login(CorrectLoginData)
 
 @pytest.fixture()
-def open_base_page_and_authorization(app):
-    app.base_page.open_base_page()
-    app.login_page.login(CorrectLoginData)
+def open_base_page_and_authorization(open_base_page, authorization):
+    pass
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def get_random_count():
     return random.sample(range(0, 6), random.randint(1, 6))
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def get_random_inform_data():
     inform_data = {
         'first_name': fake.first_name(),

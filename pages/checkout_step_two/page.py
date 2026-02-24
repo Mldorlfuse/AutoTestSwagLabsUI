@@ -9,6 +9,12 @@ from pages.checkout_step_two.locators import CheckoutStepTwoLocators
 
 class CheckoutStepTwoPage(BasePage):
 
+    def __init__(self, page):
+        super().__init__(page)
+        self.total_price = 0
+        self.final_price = 0
+        self.index = ''
+
     def get_item_name(self, item):
         with allure.step('Получить название элемента со страницы проверки'):
             return item.locator(CheckoutStepTwoLocators.INVENTORY_ITEM_NAME).text_content()
@@ -53,7 +59,6 @@ class CheckoutStepTwoPage(BasePage):
         with allure.step(f'Получить элемент с индексом {index}'):
             return self.page.locator(CheckoutStepTwoLocators.INVENTORY_ITEM).nth(index)
 
-    total_price = 0
 
     def check_total_price(self):
         with (allure.step('Проверить соответствие отображаемой суммы всех товаров')):
@@ -66,8 +71,6 @@ class CheckoutStepTwoPage(BasePage):
             expect(self.page.locator(CheckoutStepTwoLocators.SUBTOTAL_PRICE)).to_have_text(
                 f'Item total: ${self.total_price}')
 
-    final_price = 0
-
     def check_final_price(self):
         with allure.step('Проверить финальную стоимость'):
             self.final_price = float(self.page.locator(CheckoutStepTwoLocators.TAX_PRICE
@@ -79,8 +82,6 @@ class CheckoutStepTwoPage(BasePage):
         with allure.step('Проверка соответствия цен'):
             self.check_total_price()
             self.check_final_price()
-
-    index = ''
 
     def get_random_index(self):
         with allure.step('Получить случайный index'):

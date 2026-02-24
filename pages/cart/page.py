@@ -7,7 +7,7 @@ from pages.cart.locators import CartLocators
 
 class CartPage(BasePage):
 
-    CartLocators = CartLocators()
+    CartLocators = CartLocators
 
     def get_item_name(self, item):
         with allure.step('Получить название элемента со страницы корзины'):
