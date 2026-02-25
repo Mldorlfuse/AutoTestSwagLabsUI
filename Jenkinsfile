@@ -32,8 +32,12 @@ pipeline {
     post {
         always {
             script {
-                // Генерация отчета
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+                // Если плагин все еще не видит глобальную настройку,
+                // мы явно указываем commandline
+                allure includeProperties: false,
+                       jdk: '',
+                       results: [[path: 'allure-results']],
+                       commandline: 'allure' // Добавляем явное указание
             }
         }
     }
