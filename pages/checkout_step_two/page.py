@@ -69,14 +69,14 @@ class CheckoutStepTwoPage(BasePage):
                 i -= 1
 
             expect(self.page.locator(CheckoutStepTwoLocators.SUBTOTAL_PRICE)).to_have_text(
-                f'Item total: ${self.total_price}')
+                f'Item total: ${self.total_price:.2f}')
 
     def check_final_price(self):
         with allure.step('Проверить финальную стоимость'):
             self.final_price = float(self.page.locator(CheckoutStepTwoLocators.TAX_PRICE
                                                        ).inner_text().replace('Tax: $', '')) + self.total_price
             expect(self.page.locator(CheckoutStepTwoLocators.TOTAL_PRICE)).to_have_text(
-                f'Total: ${self.final_price}')
+                f'Total: ${self.final_price:.2f}')
 
     def check_all_price(self):
         with allure.step('Проверка соответствия цен'):
