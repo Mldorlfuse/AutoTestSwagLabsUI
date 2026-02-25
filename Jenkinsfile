@@ -51,11 +51,12 @@ pipeline {
     post {
         always {
             script {
-                sh "allure generate allure-results --clean -o allure-report"
+                sh "/opt/homebrew/bin/allure generate allure-results --clean -o allure-report"
+
                 try {
                     allure results: [[path: 'allure-results']]
                 } catch (Exception e) {
-                    echo "Плагин Allure не смог отобразить виджет, но отчет сгенерирован в папке."
+                    echo "Виджет плагина не загрузился, но отчет сгенерирован в файлах."
                 }
             }
         }
