@@ -50,10 +50,12 @@ pipeline {
 
     post {
         always {
-            allure includeProperties: false,
-                   jdk: '',
-                   results: [[path: 'allure-results']],
-                   tool: 'allure'
+            script {
+                allure includeProperties: false,
+                       jdk: '',
+                       results: [[path: 'allure-results']],
+                       commandline: 'allure'
+            }
         }
     }
 }
