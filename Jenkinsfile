@@ -28,11 +28,10 @@ pipeline {
     }
 
     post {
-        always {
-            // Используем стандартный вызов плагина
-            allure includeProperties: false,
-                   jdk: '',
-                   results: [[path: 'allure-results']]
-        }
+    always {
+        allure includeProperties: false,
+               jdk: 'java_home', // Имя, которое вы дали в настройках Tools
+               results: [[path: 'allure-results']]
     }
+}
 }
