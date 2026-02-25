@@ -2,14 +2,13 @@ pipeline {
     agent any
 
     tools {
-        // Это связывает ваш установленный в Tools "allure" с пайплайном
+        // Убедитесь, что в Manage Jenkins -> Tools имя инструмента именно 'allure'
         allure 'allure'
     }
 
     stages {
         stage('Install Dependencies') {
             steps {
-                // Используем python3 -m pip для надежности
                 sh '''
                     python3 -m venv venv
                     ./venv/bin/pip install --upgrade pip
@@ -21,7 +20,10 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                // Запускаем тесты через виртуальное окружение
+                // Добавляем очистку папки перед тестами, чтобы отчет был чистым
+                sh 'rm -rf allure-results'
+                // Запускаем тесты. Мы не боимся ошибки (exit code 1),
+                // так как Allure соберет отчет в блоке post
                 sh './venv/bin/pytest --alluredir=allure-results'
             }
         }
@@ -29,8 +31,10 @@ pipeline {
 
     post {
         always {
-            // Теперь Jenkins знает, где искать исполняемый файл allure
-            allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            script {
+                // Генерация отчета
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+            }
         }
     }
 }
