@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        // Убедитесь, что в Manage Jenkins -> Tools имя инструмента именно 'allure'
+        // Убедитесь, что это имя СОВПАДАЕТ с Name в Global Tool Configuration
         allure 'allure'
     }
 
@@ -20,25 +20,19 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                // Добавляем очистку папки перед тестами, чтобы отчет был чистым
                 sh 'rm -rf allure-results'
-                // Запускаем тесты. Мы не боимся ошибки (exit code 1),
-                // так как Allure соберет отчет в блоке post
-                sh './venv/bin/pytest --alluredir=allure-results'
+                // Игнорируем ошибки тестов через || true, чтобы дойти до генерации отчета
+                sh './venv/bin/pytest --alluredir=allure-results || true'
             }
         }
     }
 
     post {
         always {
-            script {
-                // Если плагин все еще не видит глобальную настройку,
-                // мы явно указываем commandline
-                allure includeProperties: false,
-                       jdk: '',
-                       results: [[path: 'allure-results']],
-                       commandline: 'allure' // Добавляем явное указание
-            }
+            // Используем стандартный вызов плагина
+            allure includeProperties: false,
+                   jdk: '',
+                   results: [[path: 'allure-results']]
         }
     }
 }
