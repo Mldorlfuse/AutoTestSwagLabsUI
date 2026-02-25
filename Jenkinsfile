@@ -51,10 +51,13 @@ pipeline {
     post {
         always {
             script {
-                allure includeProperties: false,
-                       jdk: '',
-                       results: [[path: 'allure-results']],
-                       commandline: 'allure'
+                def allurePath = '/usr/local/bin'
+
+                withEnv(["PATH+ALLURE=${allurePath}"]) {
+                    allure includeProperties: false,
+                           jdk: '',
+                           results: [[path: 'allure-results']]
+                }
             }
         }
     }
