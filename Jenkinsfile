@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         ALLURE_RESULTS = 'allure-results'
+        PATH = "/usr/local/opt/python@3.10/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
     }
 
     stages {
@@ -16,7 +17,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        python3 -m venv venv
+                        python3.10 -m venv venv
                         source venv/bin/activate
                         pip install --upgrade pip
                         pip install -r requirements.txt
@@ -25,20 +26,19 @@ pipeline {
             }
         }
 
-        stage('Install Playwright Browsers') {
+        stage('Install Playwright') {
             steps {
-                script {
-                    sh '''
-                        source venv/bin/activate
-                        playwright install chromium --with-deps
-                    '''
-                }
+                sh '''
+                    source venv/bin/activate
+                    playwright install chromium --with-deps
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
                 script {
+                    sh "mkdir -p ${ALLURE_RESULTS}"
                     sh '''
                         source venv/bin/activate
                         pytest --alluredir=${ALLURE_RESULTS} || true
