@@ -51,12 +51,11 @@ pipeline {
     post {
         always {
             script {
-                def allurePath = '/usr/local/bin'
-
-                withEnv(["PATH+ALLURE=${allurePath}"]) {
-                    allure includeProperties: false,
-                           jdk: '',
-                           results: [[path: 'allure-results']]
+                sh "allure generate allure-results --clean -o allure-report"
+                try {
+                    allure results: [[path: 'allure-results']]
+                } catch (Exception e) {
+                    echo "Плагин Allure не смог отобразить виджет, но отчет сгенерирован в папке."
                 }
             }
         }
