@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     tools {
-        // Убедитесь, что это имя СОВПАДАЕТ с Name в Global Tool Configuration
         allure 'allure'
     }
 
@@ -21,7 +20,6 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh 'rm -rf allure-results'
-                // Игнорируем ошибки тестов через || true, чтобы дойти до генерации отчета
                 sh './venv/bin/pytest --alluredir=allure-results || true'
             }
         }
@@ -30,7 +28,7 @@ pipeline {
     post {
     always {
         allure includeProperties: false,
-               jdk: 'java_home', // Имя, которое вы дали в настройках Tools
+               jdk: 'java_home',
                results: [[path: 'allure-results']]
     }
 }
